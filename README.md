@@ -1,6 +1,8 @@
 # Description
 I thought an interesting and very visual data set to use was Satellite locations. It seems like there would be an easy to access API for getting the direct Latitude, Longitude, and Altitude. But I could not find any publicly accessible endpoints for this information. NORAD and the Air Force publish information on Satellite locations, but in an obscure format called TLE (Two Line Element) sets. With a Space Perturbation Model, you can derive lots of scientifically interesting data from these TLE sets, but not create Latitude/Longitude/Altitude sets easily. Using the TLE sets published on Celestrack (http://celestrak.com/NORAD/elements/) and an SGP4 propgator based on (http://celestrak.com/publications/AIAA/2006-6753/) I calculated several Lat/Lon/Alt sets based on certain stations for the current hour. To get this information to the Web Globe I decide to create an Amazon Lambda function in Java (https://aws.amazon.com/lambda/) to pull the TLE sets, calculate the orbital positions, and build a json file that is deployed through Amazon S3 to the Web Globe's root directory. This allows me to generate the data sets in a manner that has no compute costs for the client, to update the data automatically at a set interval (No more than once per hour to meet Spack-Track/Celestrack API polling guidlines), and have a highly abstracted/decoupled system.
 
+![](d18qs7yq39787j.cloudfront.net/uploads/solutionfile/14013/d7a62496160f-Capture.PNG)
+
 ----
 
 **The WebGL Globe** supports data in `JSON` format, a sample of which you can find [here](https://github.com/dataarts/webgl-globe/blob/master/globe/population909500.json). `webgl-globe` makes heavy use of the [Three.js library](https://github.com/mrdoob/three.js/).
